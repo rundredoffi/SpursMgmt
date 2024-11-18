@@ -3,9 +3,6 @@ package JOUEURS;
 import java.util.List;
 import java.util.Scanner;
 
-import MATCHS.match;
-import MATCHS.matchCollec;
-
 public class UsineJoueur {
 	public static void ajouterMatch() {
 		try (Scanner s = new Scanner(System.in)) {
@@ -43,6 +40,7 @@ public class UsineJoueur {
 	}
 	
 	public static void AfficherJoueur() {
+		System.out.println("OKKKK");
 		List<joueur> liste = joueurCollec.recupJoueurs();
 		liste.forEach((joueurDeListe)->{
 			System.out.println(joueurDeListe.toString());

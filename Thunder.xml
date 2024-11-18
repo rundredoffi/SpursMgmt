@@ -13,7 +13,7 @@
         <TDJeu>19:22</TDJeu>
         <Points>20</Points>
         <Rebonds>5</Rebonds>
-        <Passe_D/>
+        <Passe_D>1</Passe_D>
     </Stats>
     <Stats>
         <Nom>Collins</Nom>
