@@ -113,6 +113,7 @@ public class MenuSwing {
 
     private void insertJoueurXML() {
     	String cheminFichier = JOptionPane.showInputDialog(frame, "Saisir le chemin vers le fichier XML : ");
+    	JOUEURS.joueurCollec.chargementViaXML(cheminFichier);
     }
     
     private void insertMatch() {

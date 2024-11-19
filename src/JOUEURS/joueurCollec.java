@@ -18,7 +18,7 @@ public class joueurCollec {
         SAXBuilder saxBuilder = new SAXBuilder();
         Document document = null;
 		try {
-			document = saxBuilder.build("./joueurs.xml");
+			document = saxBuilder.build("./Joueurs.xml");
 		} catch (JDOMException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,6 +37,33 @@ public class joueurCollec {
 		        String taille = joueur.getChildText("Taille");
 		        joueur nvJoueur = new joueur(nom, prenom, Integer.parseInt(age), Integer.parseInt(poid), Integer.parseInt(taille));
 		        liste.add(nvJoueur);
+		}
+	}
+	public static void chargementViaXML(String chemin) {
+		// Lecture du fichier XML
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document document = null;
+		try {
+			document = saxBuilder.build("./"+chemin);
+		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        // Récupération de la racine
+		Element racine = document.getRootElement();
+		List<Element> joueurElements = racine.getChildren("joueur");
+		    for (Element joueur : joueurElements) {
+		        String nom = joueur.getChildText("Nom");
+		        String prenom = joueur.getChildText("Prénom");
+		        String age = joueur.getChildText("Age");
+		        String poid = joueur.getChildText("Poid");
+		        String taille = joueur.getChildText("Taille");
+		        joueur nvJoueur = new joueur(nom, prenom, Integer.parseInt(age), Integer.parseInt(poid), Integer.parseInt(taille));
+		        liste.add(nvJoueur);
+		        nvJoueur.putInBdd();
 		}
 	}
 	/*
