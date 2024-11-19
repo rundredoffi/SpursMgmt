@@ -56,7 +56,7 @@ public class Menu {
                         JOUEURS.UsineJoueur.AfficherJoueur();
                         break;
                     case "2":
-                        JOUEURS.UsineJoueur.rechercheJoueur();
+                        JOUEURS.UsineJoueur.rechercheJoueur(choix);
                         break;
                     default:
                         System.out.println("Vous devez saisir un choix compris entre 1 et 2");
