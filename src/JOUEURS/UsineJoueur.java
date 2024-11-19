@@ -4,11 +4,13 @@ import java.util.List;
 
 public class UsineJoueur {
 
-    public static void ajouterJoueur(String nom, String prenom, int age, int poid, int taille) {
+    public static Boolean ajouterJoueur(String nom, String prenom, int age, int poid, int taille) {
         joueur LeJoueur = new joueur(nom, prenom, age, poid, taille);
         if (joueurCollec.ajoutJoueur(LeJoueur)) {
             System.out.println("Joueur ajouté !");
+            return true;
         }
+        return false;
     }
 
     public static String rechercheJoueur(String nomJoueur) {

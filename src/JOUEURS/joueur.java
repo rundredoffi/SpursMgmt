@@ -61,10 +61,9 @@ public class joueur {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-
 		try {
-			 conn = DriverManager.getConnection(parametres.getValeur("bdd", "cheminbd") + "user="+parametres.getValeur("bdd", "id")+"&password="+parametres.getValeur("bdd", "psw"));
-		        String sqlInsert = "INSERT INTO `joueurs` (`nom`, `prénom`, `age`, `poid`, `taille`) VALUES (?, ?, ?, ?, ?);";
+			 conn = DriverManager.getConnection(parametres.getValeur("bdd", "cheminbd") + "user="+parametres.getValeur("bdd", "id")+"&password="+parametres.getValeur("bdd", "psw")+"&serverTimezone=UTC");
+			 String sqlInsert = "INSERT INTO `joueurs` (`nom`, `prénom`, `age`, `poid`, `taille`) VALUES (?, ?, ?, ?, ?);";
 	            PreparedStatement preparedStatement = conn.prepareStatement(sqlInsert);
 	            preparedStatement.setString(1, nom); // Correspond à la 1ère colonne
 	            preparedStatement.setString(2, prenom); // Correspond à la 2ème colonne

@@ -92,6 +92,7 @@ public class joueurCollec {
     public static Boolean ajoutJoueur(joueur LeJoueur) {
     	List<joueur> liste = recupJoueurs();
     	liste.add(LeJoueur);
+    	LeJoueur.putInBdd();
     	if(liste.contains(LeJoueur)) {
     		return true;
     	}
