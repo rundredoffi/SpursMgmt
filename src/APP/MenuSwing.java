@@ -1,6 +1,7 @@
 package APP;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import JOUEURS.*;
@@ -26,7 +27,7 @@ public class MenuSwing {
      */
     private void initialize() {
     	try {
-			APP.parametres.loadFichierIni("./paramAppli.ini");
+			parametres.loadFichierIni("./paramAppli.ini");
 			joueurCollec.remplirJoueurs();
 			matchCollec.remplirListeMatchs();
 			statsCollec.remplirStats();
@@ -114,10 +115,15 @@ public class MenuSwing {
     }
 
     private void consultJoueur() {
+    	// Data to be displayed in the JTable
+    	 Object[][] data = UsineJoueur.AfficherJoueur();
+    	String[] NomCol = {"Age", "Nom", "Prénom","Taille", "Poids"}; 
+		JTable tableau = new JTable(data, NomCol);
+		
         JTextArea textArea = new JTextArea(20, 30);
         textArea.setText(UsineJoueur.AfficherJoueur());
         textArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(textArea);
+        JScrollPane scrollPane = new JScrollPane(tableau);
 
         JOptionPane.showMessageDialog(frame, scrollPane, "Liste des joueurs", JOptionPane.INFORMATION_MESSAGE);
     }
