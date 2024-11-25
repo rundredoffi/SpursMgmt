@@ -39,7 +39,7 @@ public class joueurCollec {
 		        liste.add(nvJoueur);
 		}
 	}
-	public static void chargementViaXML(String chemin) {
+	public static Boolean chargementViaXML(String chemin) {
 		// Lecture du fichier XML
         SAXBuilder saxBuilder = new SAXBuilder();
         Document document = null;
@@ -64,7 +64,8 @@ public class joueurCollec {
 		        joueur nvJoueur = new joueur(nom, prenom, Integer.parseInt(age), Integer.parseInt(poid), Integer.parseInt(taille));
 		        liste.add(nvJoueur);
 		        nvJoueur.putInBdd();
-		}
+		};
+		return true;
 	}
 	/*
 	 * Méthode pour récupérer la liste des joueurs

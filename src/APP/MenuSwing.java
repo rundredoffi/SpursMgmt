@@ -3,13 +3,19 @@ package APP;
 import java.io.IOException;
 
 import javax.swing.*;
-import JOUEURS.UsineJoueur;
+import JOUEURS.*;
+import MATCHS.*;
+import STATS.*;
+import java.awt.BorderLayout;
+import java.awt.Font;
+
 
 public class MenuSwing {
     private JFrame frame;
     private JMenuBar menuBar;
     private JMenu joueursMenu, matchMenu, statsMenu;
     private JMenuItem insertJoueur, consultJoueur,joueurViaXML, insertMatch, consultMatch,matchViaXML, insertStats, consultStats, statsViaXML,quitter;
+    private JLabel lblTitreApp;
 
     public MenuSwing() {
         initialize();
@@ -21,9 +27,9 @@ public class MenuSwing {
     private void initialize() {
     	try {
 			APP.parametres.loadFichierIni("./paramAppli.ini");
-			JOUEURS.joueurCollec.remplirJoueurs();
-			MATCHS.matchCollec.remplirListeMatchs();
-			STATS.statsCollec.remplirStats();
+			joueurCollec.remplirJoueurs();
+			matchCollec.remplirListeMatchs();
+			statsCollec.remplirStats();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -69,6 +75,11 @@ public class MenuSwing {
         menuBar.add(quitter);
 
         frame.setJMenuBar(menuBar);
+        
+        lblTitreApp = new JLabel("Spurs Management");
+        lblTitreApp.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitreApp.setFont(new Font("Trebuchet MS", Font.PLAIN, 17));
+        frame.getContentPane().add(lblTitreApp, BorderLayout.NORTH);
         frame.setVisible(true);
 
         // Add action listeners
@@ -113,7 +124,7 @@ public class MenuSwing {
 
     private void insertJoueurXML() {
     	String cheminFichier = JOptionPane.showInputDialog(frame, "Saisir le chemin vers le fichier XML : ");
-    	JOUEURS.joueurCollec.chargementViaXML(cheminFichier);
+    	joueurCollec.chargementViaXML(cheminFichier);
     }
     
     private void insertMatch() {
