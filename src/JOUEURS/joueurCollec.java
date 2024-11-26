@@ -35,7 +35,8 @@ public class joueurCollec {
 	            int age = rs.getInt("age");
 	            int poid = rs.getInt("poid");
 	            int taille = rs.getInt("taille");
-	            joueur nvJoueur = new joueur(nom, prenom, age, poid, taille);
+	            String photo = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png";
+	            joueur nvJoueur = new joueur(nom, prenom, age, poid, taille,photo);
 	            liste.add(nvJoueur);
 	        }
 	    } catch (SQLException ex) {
@@ -77,7 +78,8 @@ public class joueurCollec {
 		        String age = joueur.getChildText("Age");
 		        String poid = joueur.getChildText("Poid");
 		        String taille = joueur.getChildText("Taille");
-		        joueur nvJoueur = new joueur(nom, prenom, Integer.parseInt(age), Integer.parseInt(poid), Integer.parseInt(taille));
+		        String photo = joueur.getChildText("PhotoPath");
+		        joueur nvJoueur = new joueur(nom, prenom, Integer.parseInt(age), Integer.parseInt(poid), Integer.parseInt(taille), photo);
 		        liste.add(nvJoueur);
 		        nvJoueur.putInBdd();
 		};

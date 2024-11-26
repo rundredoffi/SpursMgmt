@@ -27,6 +27,13 @@ public class joueur {
 		this.taille = taille;
 		this.photoPath = photo;
 	}
+	
+	public String getPhotoPath() {
+		return photoPath;
+	}
+	public void setPhotoPath(String photoPath) {
+		this.photoPath = photoPath;
+	}
 	public void setNom(String nom) {
 		this.nom = nom;
 	}

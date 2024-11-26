@@ -1,5 +1,6 @@
 package APP;
 
+import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -12,6 +13,7 @@ import MATCHS.*;
 import STATS.*;
 
 public class MenuSwing {
+	
     private JFrame frame;
     private JMenuBar menuBar;
     private JMenu joueursMenu, matchMenu, statsMenu;
@@ -19,9 +21,12 @@ public class MenuSwing {
     private JLabel lblTitreApp;
 
     public MenuSwing() {
-        initialize();
+    	initialize();
+        
     }
-
+    /**
+	 * @wbp.parser.entryPoint
+	 */
     private void initialize() {
         try {
             parametres.loadFichierIni("./paramAppli.ini");
@@ -96,13 +101,15 @@ public class MenuSwing {
         JTextField ageField = new JTextField();
         JTextField poidField = new JTextField();
         JTextField tailleField = new JTextField();
+        JTextField photoPath = new JTextField();
 
         Object[] message = {
             "Nom:", nomField,
             "Prénom:", prenomField,
             "Âge:", ageField,
             "Poids:", poidField,
-            "Taille:", tailleField
+            "Taille:", tailleField,
+            "Lien vers la photo", photoPath,
         };
 
         int option = JOptionPane.showConfirmDialog(frame, message, "Insérer un joueur", JOptionPane.OK_CANCEL_OPTION);
@@ -113,8 +120,9 @@ public class MenuSwing {
                 int age = Integer.parseInt(ageField.getText());
                 int poid = Integer.parseInt(poidField.getText());
                 int taille = Integer.parseInt(tailleField.getText());
+                String PathPhoto = photoPath.getText();
 
-                if (UsineJoueur.ajouterJoueur(nom, prenom, age, poid, taille)) {
+                if (UsineJoueur.ajouterJoueur(nom, prenom, age, poid, taille, PathPhoto)) {
                     JOptionPane.showMessageDialog(frame, "Joueur ajouté !");
                 } else {
                     JOptionPane.showMessageDialog(frame, "Erreur durant l'ajout :/");
@@ -129,7 +137,14 @@ public class MenuSwing {
         Object[][] data = UsineJoueur.AfficherJoueur();
         String[] columnNames = {"Nom", "Prénom", "Âge", "Poids", "Taille", "Photo"};
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
-        JTable table = new JTable(model);
+        JTable table = new JTable(model) {
+
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column){  
+                return false;  
+            }
+        };
 
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
@@ -168,7 +183,7 @@ public class MenuSwing {
         // Ajouter la photo du joueur
         JLabel photoLabel = new JLabel();
         if (photoPath != null && !photoPath.isEmpty()) {
-            ImageIcon photoIcon = new ImageIcon(photoPath);
+            ImageIcon photoIcon = new ImageIcon("./"+photoPath);
             photoLabel.setIcon(photoIcon);
         } else {
             photoLabel.setText("Pas de photo disponible");
@@ -182,8 +197,12 @@ public class MenuSwing {
 
     private void insertJoueurXML() {
         String cheminFichier = JOptionPane.showInputDialog(frame, "Saisir le chemin vers le fichier XML : ");
-        if (cheminFichier != null) {
+        File Fichier = new File(cheminFichier);
+        
+        if (Fichier.exists()) {
             joueurCollec.chargementViaXML(cheminFichier);
+        }else {
+            JOptionPane.showMessageDialog(frame, "Erreur: Le fichier est introuvable ou indisponible. Veuillez vérifier le chemin.");
         }
     }
 

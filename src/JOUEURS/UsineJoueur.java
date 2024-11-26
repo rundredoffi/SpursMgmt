@@ -4,8 +4,8 @@ import java.util.List;
 
 public class UsineJoueur {
 
-    public static Boolean ajouterJoueur(String nom, String prenom, int age, int poid, int taille) {
-        joueur LeJoueur = new joueur(nom, prenom, age, poid, taille);
+    public static Boolean ajouterJoueur(String nom, String prenom, int age, int poid, int taille, String photo) {
+        joueur LeJoueur = new joueur(nom, prenom, age, poid, taille, photo);
         if (joueurCollec.ajoutJoueur(LeJoueur)) {
             System.out.println("Joueur ajouté !");
             return true;
