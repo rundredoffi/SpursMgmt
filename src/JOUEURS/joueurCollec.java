@@ -1,6 +1,9 @@
 package JOUEURS;
 
 import java.io.IOException;
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.jdom2.Document;
@@ -8,36 +11,49 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
+import APP.parametres;
+
 public class joueurCollec {
 	private static List<joueur> liste= new ArrayList<joueur>();
 	/*
 	 * Méthode pour remplir la liste de joueurs
 	 */
 	public static void remplirJoueurs() {
-		// Lecture du fichier XML
-        SAXBuilder saxBuilder = new SAXBuilder();
-        Document document = null;
-		try {
-			document = saxBuilder.build("./Joueurs.xml");
-		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        // Récupération de la racine
-		Element racine = document.getRootElement();
-		List<Element> joueurElements = racine.getChildren("joueur");
-		    for (Element joueur : joueurElements) {
-		        String nom = joueur.getChildText("Nom");
-		        String prenom = joueur.getChildText("Prénom");
-		        String age = joueur.getChildText("Age");
-		        String poid = joueur.getChildText("Poid");
-		        String taille = joueur.getChildText("Taille");
-		        joueur nvJoueur = new joueur(nom, prenom, Integer.parseInt(age), Integer.parseInt(poid), Integer.parseInt(taille));
-		        liste.add(nvJoueur);
-		}
+	    // Connexion à la base de données
+	    Connection conn = null;
+	    Statement stmt = null;
+	    ResultSet rs = null;
+	    try {
+	        conn = DriverManager.getConnection(parametres.getValeur("bdd", "cheminbd") + "user=" + parametres.getValeur("bdd", "id") + "&password=" + parametres.getValeur("bdd", "psw") + "&serverTimezone=UTC");
+	        String sql = "SELECT nom, prénom, age, poid, taille FROM joueurs";
+	        stmt = conn.createStatement();
+	        rs = stmt.executeQuery(sql);
+
+	        while (rs.next()) {
+	            String nom = rs.getString("nom");
+	            String prenom = rs.getString("prénom");
+	            int age = rs.getInt("age");
+	            int poid = rs.getInt("poid");
+	            int taille = rs.getInt("taille");
+	            joueur nvJoueur = new joueur(nom, prenom, age, poid, taille);
+	            liste.add(nvJoueur);
+	        }
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    } finally {
+	        if (rs != null) {
+	            try {
+	                rs.close();
+	            } catch (SQLException sqlEx) { } // ignore
+	            rs = null;
+	        }
+	        if (stmt != null) {
+	            try {
+	                stmt.close();
+	            } catch (SQLException sqlEx) { } // ignore
+	            stmt = null;
+	        }
+	    }
 	}
 	public static Boolean chargementViaXML(String chemin) {
 		// Lecture du fichier XML

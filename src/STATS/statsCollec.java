@@ -21,7 +21,7 @@ public class statsCollec {
 	public static void remplirStats() {
 	    List<joueur> listeJoueurs = JOUEURS.joueurCollec.recupJoueurs();
 	    List<match> ListeMatchs = MATCHS.matchCollec.recupMatchs();
-	    String[] ListeFichier = {"./Heat.xml","./Rockets.xml","./Thunder.xml"}; // Liste des fichier de stats
+	    String[] ListeFichier = {"./Heat.xml","./Rockets.xml"}; // Liste des fichier de stats
 	    
 	    for(int i = 0; i < ListeFichier.length;i++ ){
 	    	// Lecture du fichier XML

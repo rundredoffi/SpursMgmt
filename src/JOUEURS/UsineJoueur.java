@@ -1,6 +1,5 @@
 package JOUEURS;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UsineJoueur {
@@ -21,16 +20,15 @@ public class UsineJoueur {
 
     public static Object[][] AfficherJoueur() {
         List<joueur> liste = joueurCollec.recupJoueurs();
-        
-        ArrayList<String> MaSuperListe = new ArrayList<String>();
-        liste.forEach(joueurDeListe -> {
-        MaSuperListe.add(joueurDeListe.getNom());
-        MaSuperListe.add(joueurDeListe.getPrenom());
-        MaSuperListe.add(joueurDeListe.getAge().toString());
-        MaSuperListe.add(joueurDeListe.getPoid().toString());
-        MaSuperListe.add(joueurDeListe.getTaille().toString());
+        Object[][] data = new Object[liste.size()][5];
+        for (int i = 0; i < liste.size(); i++) {
+            joueur j = liste.get(i);
+            data[i][0] = j.getNom();
+            data[i][1] = j.getPrenom();
+            data[i][2] = j.getAge();
+            data[i][3] = j.getPoid();
+            data[i][4] = j.getTaille();
         }
-        );
-        return MaSuperListe;
+        return data;
     }
 }
