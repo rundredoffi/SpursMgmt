@@ -2,6 +2,7 @@ package APP;
 
 import java.io.File;
 import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -9,11 +10,11 @@ import javax.swing.table.DefaultTableModel;
 import JOUEURS.*;
 import java.awt.BorderLayout;
 import java.awt.Font;
+
 import MATCHS.*;
 import STATS.*;
 
-public class MenuSwing {
-	
+public class MenuSwing {	
     private JFrame frame;
     private JMenuBar menuBar;
     private JMenu joueursMenu, matchMenu, statsMenu;
@@ -91,10 +92,13 @@ public class MenuSwing {
         joueurViaXML.addActionListener(e -> insertJoueurXML());
         insertMatch.addActionListener(e -> insertMatch());
         consultMatch.addActionListener(e -> consultMatch());
+        matchViaXML.addActionListener(e-> insertMatchXML());
         insertStats.addActionListener(e -> insertStats());
         consultStats.addActionListener(e -> consultStats());
     }
-
+/*
+ *  Interface d'insertion d'un joueur dans la base
+ */
     private void insertJoueur() {
         JTextField nomField = new JTextField();
         JTextField prenomField = new JTextField();
@@ -132,16 +136,18 @@ public class MenuSwing {
             }
         }
     }
-
+/*
+ * Permet d'afficher la liste des joueurs chargés
+ */
     private void consultJoueur() {
         Object[][] data = UsineJoueur.AfficherJoueur();
         String[] columnNames = {"Nom", "Prénom", "Âge", "Poids", "Taille", "Photo"};
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         JTable table = new JTable(model) {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			public boolean isCellEditable(int row, int column){  
+            public boolean isCellEditable(int row, int column){  
                 return false;  
             }
         };
@@ -168,10 +174,12 @@ public class MenuSwing {
         tableFrame.add(scrollPane);
         tableFrame.setVisible(true);
     }
-
+/*
+ * Permet l'affichage dans une fenêtre de détails des joueurs
+ */
     private void showJoueurDetails(String nom, String prenom, int age, int poid, int taille, String photoPath) {
-        JFrame detailsFrame = new JFrame("Détails du joueur");
-        detailsFrame.setSize(300, 400);
+        JFrame detailsFrame = new JFrame("Détails de "+nom+" " + prenom);
+        detailsFrame.setSize(500, 400);
         JTextArea detailsArea = new JTextArea();
         detailsArea.setEditable(false);
         detailsArea.setText("Nom: " + nom + "\n" +
@@ -183,18 +191,26 @@ public class MenuSwing {
         // Ajouter la photo du joueur
         JLabel photoLabel = new JLabel();
         if (photoPath != null && !photoPath.isEmpty()) {
-            ImageIcon photoIcon = new ImageIcon("./"+photoPath);
-            photoLabel.setIcon(photoIcon);
+            File imgFile = new File(photoPath);
+            System.out.println("Image path: " + imgFile.getAbsolutePath());
+            if (imgFile.exists()) {
+                ImageIcon photoIcon = new ImageIcon(imgFile.getAbsolutePath());
+                photoLabel.setIcon(photoIcon);
+            } else {
+                photoLabel.setText("Image file not found");
+            }
         } else {
             photoLabel.setText("Pas de photo disponible");
         }
-        
+
         detailsFrame.setLayout(new BorderLayout());
         detailsFrame.add(detailsArea, BorderLayout.CENTER);
         detailsFrame.add(photoLabel, BorderLayout.NORTH);
         detailsFrame.setVisible(true);
     }
-
+/*
+ * Méthode chargement de joueur via un fichier XML.
+ */
     private void insertJoueurXML() {
         String cheminFichier = JOptionPane.showInputDialog(frame, "Saisir le chemin vers le fichier XML : ");
         File Fichier = new File(cheminFichier);
@@ -205,19 +221,30 @@ public class MenuSwing {
             JOptionPane.showMessageDialog(frame, "Erreur: Le fichier est introuvable ou indisponible. Veuillez vérifier le chemin.");
         }
     }
-
+    //@TODO : Insertion d'nu match manuellement
     private void insertMatch() {
         JOptionPane.showMessageDialog(frame, "Match : Ajout de match");
     }
-
+   //@TODO : Insertiond de match via fichier XML
+    private void insertMatchXML() {
+    	String cheminFichier = JOptionPane.showInputDialog(frame, "Saisir le chemin vers le fichier XML : ");
+        File Fichier = new File(cheminFichier);
+        
+        if (Fichier.exists()) {
+            matchCollec.chargementViaXML(cheminFichier);
+        }else {
+            JOptionPane.showMessageDialog(frame, "Erreur: Le fichier est introuvable ou indisponible. Veuillez vérifier le chemin.");
+        }
+    }
+    //@TODO : Consultation détails d'un match
     private void consultMatch() {
         JOptionPane.showMessageDialog(frame, "Match : Consultation de match");
     }
-
+    //@TODO : Insertion manuelle de stats
     private void insertStats() {
         JOptionPane.showMessageDialog(frame, "Stats : Ajout de stats");
     }
-
+    //@TODO : Consultation de statistiques
     private void consultStats() {
         JOptionPane.showMessageDialog(frame, "Stats : Consultation de stats");
     }

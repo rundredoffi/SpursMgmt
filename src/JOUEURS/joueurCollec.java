@@ -15,7 +15,7 @@ import APP.parametres;
 
 public class joueurCollec {
 	private static List<joueur> liste= new ArrayList<joueur>();
-	/*
+	/**
 	 * Méthode pour remplir la liste de joueurs
 	 */
 	public static void remplirJoueurs() {
@@ -25,7 +25,7 @@ public class joueurCollec {
 	    ResultSet rs = null;
 	    try {
 	        conn = DriverManager.getConnection(parametres.getValeur("bdd", "cheminbd") + "user=" + parametres.getValeur("bdd", "id") + "&password=" + parametres.getValeur("bdd", "psw") + "&serverTimezone=UTC");
-	        String sql = "SELECT nom, prénom, age, poid, taille FROM joueurs";
+	        String sql = "SELECT nom, prénom, age, poid, taille, photo FROM joueurs";
 	        stmt = conn.createStatement();
 	        rs = stmt.executeQuery(sql);
 
@@ -35,7 +35,7 @@ public class joueurCollec {
 	            int age = rs.getInt("age");
 	            int poid = rs.getInt("poid");
 	            int taille = rs.getInt("taille");
-	            String photo = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png";
+	            String photo = rs.getString("photo");
 	            joueur nvJoueur = new joueur(nom, prenom, age, poid, taille,photo);
 	            liste.add(nvJoueur);
 	        }
@@ -56,6 +56,11 @@ public class joueurCollec {
 	        }
 	    }
 	}
+	/**
+	 * Méthode pour chargé un fichier XML avec les joueurs
+	 * @param chemin
+	 * @return
+	 */
 	public static Boolean chargementViaXML(String chemin) {
 		// Lecture du fichier XML
         SAXBuilder saxBuilder = new SAXBuilder();

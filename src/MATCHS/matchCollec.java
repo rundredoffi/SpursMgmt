@@ -94,4 +94,31 @@ public class matchCollec {
     	}
     	return leMatch;
     }
+    
+    public static void chargementViaXML(String Chemin) {
+        // Lecture du fichier XML
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document document = null;
+		try {
+			document = saxBuilder.build(Chemin);
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        // Récupération de la racine
+		Element racine = document.getRootElement();
+		List<Element> matchElements = racine.getChildren("match");
+		    for (Element match : matchElements) {
+		        String MatchID = match.getChildText("MatchID");
+		        String Adversaire = match.getChildText("Adversaire");
+		        String Date = match.getChildText("Date");
+		        String Lieu = match.getChildText("Lieu");
+		        String Resultat = match.getChildText("Resultat");
+		        String DifScore = match.getChildText("DifScore");
+		        match nvMatch = new match(Integer.parseInt(MatchID), Adversaire, Date, Lieu, Resultat, DifScore);
+		        liste.add(nvMatch);
+		        nvMatch.putInBdd();
+		}
+    }
 }

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"APP"},{"l":"JOUEURS"},{"l":"MATCHS"},{"l":"STATS"}];updateSearchResults();
