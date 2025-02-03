@@ -18,6 +18,17 @@ public class joueur {
 	public String getNom() {
 		return nom;
 	}
+	/**
+	 * Objet représentant un joueur
+	 * 
+	 * @param nom
+	 * @param prenom
+	 * @param age
+	 * @param poid
+	 * @param taille
+	 * @param photo
+	 * @author jouin-n
+	 */
 	public joueur(String nom, String prenom, Integer age, Integer poid, Integer taille, String photo) {
 		super();
 		this.nom = nom;
@@ -27,7 +38,7 @@ public class joueur {
 		this.taille = taille;
 		this.photoPath = photo;
 	}
-	
+
 	public String getPhotoPath() {
 		return photoPath;
 	}
@@ -61,11 +72,18 @@ public class joueur {
 	public void setTaille(Integer taille) {
 		this.taille = taille;
 	}
-	@Override // Méthode pour afficher 1 joueur
+	/**
+	 * Méthode poru afficher transformé un joueur en ligne de texte
+	 */
+	@Override
 	public String toString() {
 		return "Nom : " + nom +"\n Prenom :" + prenom + "\n Age : " + age + " ans\n Poid : " + poid + "\n Taille : " + taille
 				+ " cm\n";
 	}
+	/**
+	 * Méthode pour insérer l'objet joueur en base de données
+	 * @author jouin-n
+	 */
 	public void putInBdd() { // Envoie du joueur en base de données
 	    Connection conn = null;
 	    Statement stmt = null;
