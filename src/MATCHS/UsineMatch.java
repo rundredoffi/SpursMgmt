@@ -10,7 +10,7 @@ public class UsineMatch {
 		});
 	}
 	public static void rechercheMatch() {
-		matchCollec.remplirListeMatchs();
+		matchCollec.chargementViaXML("./Matchs.xml");
 		try (Scanner s = new Scanner(System.in)) {
 			System.out.println("Saisir l'identifiant du match recherché : ");
 			String matchId = s.nextLine(); // On récupère le choix de l'utilisateur

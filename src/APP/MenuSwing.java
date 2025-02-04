@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import MATCHS.*;
 import STATS.*;
+import UTILISATEURS.*;
 
 public class MenuSwing {
     private JFrame frame;
@@ -30,15 +31,9 @@ public class MenuSwing {
         if (!showLoginDialog()) {
             System.exit(0);
         }
-
-        try {
-            parametres.loadFichierIni("./paramAppli.ini");
-            joueurCollec.remplirJoueurs();
-            matchCollec.remplirListeMatchs();
-            statsCollec.remplirStats();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        joueurCollec.remplirJoueurs();
+        matchCollec.remplirListeMatchs();
+        statsCollec.remplirStats();
         frame = new JFrame("Spurs Management");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
@@ -72,17 +67,6 @@ public class MenuSwing {
         statsMenu.add(consultStats);
         statsMenu.add(statsViaXML);
 
-        // Auth Menu
-        authMenu = new JMenu("Auth");
-        login = new JMenuItem("Login");
-        login.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showLoginDialog();
-            }
-        });
-        authMenu.add(login);
-
         // Quit Menu
         quitter = new JMenuItem("Quitter");
         quitter.addActionListener(e -> System.exit(0));
@@ -113,6 +97,12 @@ public class MenuSwing {
     }
 
     private boolean showLoginDialog() {
+        try {
+			parametres.loadFichierIni("./paramAppli.ini");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
         Object[] message = {
@@ -120,17 +110,13 @@ public class MenuSwing {
             "Password:", passwordField
         };
 
-        int option = JOptionPane.showConfirmDialog(frame, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+        int option = JOptionPane.showConfirmDialog(frame, message, "Spurs Management - Login", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-
-            if ("root".equals(username) && "123456".equals(password)) {
-                JOptionPane.showMessageDialog(frame, "Login avec succès");
+            Boolean auth = UtilisateursCollec.authentification(username, password);
+            if (auth) {
                 return true;
-            } else {
-                JOptionPane.showMessageDialog(frame, "Login failed");
-                return false;
             }
         }
         return false;
