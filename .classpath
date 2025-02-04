@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="Z:/BTS 2/Informatique/B2 - SLAM/SpursMgmt/lib/jdom-2.0.3.jar"/>
-	<classpathentry kind="lib" path="Z:/BTS 2/Informatique/B2 - SLAM/SpursMgmt/lib/mysql-connector-java-5.1.47.jar"/>
+	<classpathentry kind="lib" path="C:/Users/conta/Documents/Java/SpursJava/lib/jdom-2.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/conta/Documents/Java/SpursJava/lib/mysql-connector-java-5.1.47.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

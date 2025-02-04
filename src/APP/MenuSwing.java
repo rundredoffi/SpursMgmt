@@ -2,7 +2,6 @@ package APP;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -10,25 +9,28 @@ import javax.swing.table.DefaultTableModel;
 import JOUEURS.*;
 import java.awt.BorderLayout;
 import java.awt.Font;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import MATCHS.*;
 import STATS.*;
 
-public class MenuSwing {	
+public class MenuSwing {
     private JFrame frame;
     private JMenuBar menuBar;
-    private JMenu joueursMenu, matchMenu, statsMenu;
-    private JMenuItem insertJoueur, consultJoueur, joueurViaXML, insertMatch, consultMatch, matchViaXML, insertStats, consultStats, statsViaXML, quitter;
+    private JMenu joueursMenu, matchMenu, statsMenu, authMenu;
+    private JMenuItem insertJoueur, consultJoueur, joueurViaXML, insertMatch, consultMatch, matchViaXML, insertStats, consultStats, statsViaXML, quitter, login;
     private JLabel lblTitreApp;
 
     public MenuSwing() {
-    	initialize();
-        
+        initialize();
     }
-    /**
-	 * @wbp.parser.entryPoint
-	 */
+
     private void initialize() {
+        // Appel à la méthode d'authentification
+        if (!showLoginDialog()) {
+            System.exit(0);
+        }
+
         try {
             parametres.loadFichierIni("./paramAppli.ini");
             joueurCollec.remplirJoueurs();
@@ -69,6 +71,18 @@ public class MenuSwing {
         statsMenu.add(insertStats);
         statsMenu.add(consultStats);
         statsMenu.add(statsViaXML);
+
+        // Auth Menu
+        authMenu = new JMenu("Auth");
+        login = new JMenuItem("Login");
+        login.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showLoginDialog();
+            }
+        });
+        authMenu.add(login);
+
         // Quit Menu
         quitter = new JMenuItem("Quitter");
         quitter.addActionListener(e -> System.exit(0));
@@ -76,6 +90,7 @@ public class MenuSwing {
         menuBar.add(joueursMenu);
         menuBar.add(matchMenu);
         menuBar.add(statsMenu);
+        menuBar.add(authMenu);
         menuBar.add(quitter);
 
         frame.setJMenuBar(menuBar);
@@ -96,9 +111,34 @@ public class MenuSwing {
         insertStats.addActionListener(e -> insertStats());
         consultStats.addActionListener(e -> consultStats());
     }
-/*
- *  Interface d'insertion d'un joueur dans la base
- */
+
+    private boolean showLoginDialog() {
+        JTextField usernameField = new JTextField();
+        JPasswordField passwordField = new JPasswordField();
+        Object[] message = {
+            "Username:", usernameField,
+            "Password:", passwordField
+        };
+
+        int option = JOptionPane.showConfirmDialog(frame, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+
+            if ("root".equals(username) && "123456".equals(password)) {
+                JOptionPane.showMessageDialog(frame, "Login avec succès");
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(frame, "Login failed");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /*
+     *  Interface d'insertion d'un joueur dans la base
+     */
     private void insertJoueur() {
         JTextField nomField = new JTextField();
         JTextField prenomField = new JTextField();
@@ -136,9 +176,10 @@ public class MenuSwing {
             }
         }
     }
-/*
- * Permet d'afficher la liste des joueurs chargés
- */
+
+    /*
+     * Permet d'afficher la liste des joueurs chargés
+     */
     private void consultJoueur() {
         Object[][] data = UsineJoueur.AfficherJoueur();
         String[] columnNames = {"Nom", "Prénom", "Âge", "Poids", "Taille", "Photo"};
@@ -174,9 +215,10 @@ public class MenuSwing {
         tableFrame.add(scrollPane);
         tableFrame.setVisible(true);
     }
-/*
- * Permet l'affichage dans une fenêtre de détails des joueurs
- */
+
+    /*
+     * Permet l'affichage dans une fenêtre de détails des joueurs
+     */
     private void showJoueurDetails(String nom, String prenom, int age, int poid, int taille, String photoPath) {
         JFrame detailsFrame = new JFrame("Détails de "+nom+" " + prenom);
         detailsFrame.setSize(500, 400);
@@ -208,9 +250,10 @@ public class MenuSwing {
         detailsFrame.add(photoLabel, BorderLayout.NORTH);
         detailsFrame.setVisible(true);
     }
-/*
- * Méthode chargement de joueur via un fichier XML.
- */
+
+    /*
+     * Méthode chargement de joueur via un fichier XML.
+     */
     private void insertJoueurXML() {
         String cheminFichier = JOptionPane.showInputDialog(frame, "Saisir le chemin vers le fichier XML : ");
         File Fichier = new File(cheminFichier);
@@ -221,13 +264,15 @@ public class MenuSwing {
             JOptionPane.showMessageDialog(frame, "Erreur: Le fichier est introuvable ou indisponible. Veuillez vérifier le chemin.");
         }
     }
-    //@TODO : Insertion d'nu match manuellement
+    
+    //@TODO : Insertion d'un match manuellement
     private void insertMatch() {
         JOptionPane.showMessageDialog(frame, "Match : Ajout de match");
     }
-   //@TODO : Insertiond de match via fichier XML
+
+    //@TODO : Insertion de match via fichier XML
     private void insertMatchXML() {
-    	String cheminFichier = JOptionPane.showInputDialog(frame, "Saisir le chemin vers le fichier XML : ");
+        String cheminFichier = JOptionPane.showInputDialog(frame, "Saisir le chemin vers le fichier XML : ");
         File Fichier = new File(cheminFichier);
         
         if (Fichier.exists()) {
@@ -236,14 +281,17 @@ public class MenuSwing {
             JOptionPane.showMessageDialog(frame, "Erreur: Le fichier est introuvable ou indisponible. Veuillez vérifier le chemin.");
         }
     }
+
     //@TODO : Consultation détails d'un match
     private void consultMatch() {
         JOptionPane.showMessageDialog(frame, "Match : Consultation de match");
     }
+
     //@TODO : Insertion manuelle de stats
     private void insertStats() {
         JOptionPane.showMessageDialog(frame, "Stats : Ajout de stats");
     }
+
     //@TODO : Consultation de statistiques
     private void consultStats() {
         JOptionPane.showMessageDialog(frame, "Stats : Consultation de stats");
