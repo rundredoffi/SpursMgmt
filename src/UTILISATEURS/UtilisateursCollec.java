@@ -10,12 +10,14 @@ import java.sql.Statement;
 import APP.parametres;
 
 public class UtilisateursCollec {
-	public static Boolean authentification(String identifiant, String password) {
+	public static UTILISATEUR authentification(String identifiant, String password) {
 		
 	    // Connexion à la base de données
 	    Connection conn = null;
 	    Statement stmt = null;
 	    ResultSet rs = null;
+	    // Création utilisateur
+	    UTILISATEUR monUtilisateur = null;
 	    try {
 	        conn = DriverManager.getConnection(parametres.getValeur("bdd", "cheminbd") + "user=" + parametres.getValeur("bdd", "id") + "&password=" + parametres.getValeur("bdd", "psw") + "&serverTimezone=UTC");
 	        String sql = "SELECT username, habilitations FROM utilisateurs WHERE username=? AND password=?";
@@ -23,8 +25,12 @@ public class UtilisateursCollec {
 	        preparedStatement.setString(1, identifiant); // Correspond à la 1ère colonne
 	        preparedStatement.setString(2, password); // Correspond à la 2ème colonne
 	        ResultSet res = preparedStatement.executeQuery();
-	        if (res.next()) {
-		        return res.first();
+	        boolean auth = res.first();
+	        if(auth) {
+	            String username = res.getString("username");
+	            String habilitations = res.getString("habilitations");
+	        	monUtilisateur = new UTILISATEUR (username,habilitations);
+	        	return monUtilisateur;
 	        }
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();
@@ -42,6 +48,6 @@ public class UtilisateursCollec {
 	            stmt = null;
 	        }
 	    }
-        return false;
+        return null;
 	}
 }

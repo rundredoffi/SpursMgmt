@@ -9,8 +9,6 @@ import javax.swing.table.DefaultTableModel;
 import JOUEURS.*;
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import MATCHS.*;
 import STATS.*;
 import UTILISATEURS.*;
@@ -18,11 +16,17 @@ import UTILISATEURS.*;
 public class MenuSwing {
     private JFrame frame;
     private JMenuBar menuBar;
-    private JMenu joueursMenu, matchMenu, statsMenu, authMenu;
+    private JMenu joueursMenu, matchMenu, statsMenu;
     private JMenuItem insertJoueur, consultJoueur, joueurViaXML, insertMatch, consultMatch, matchViaXML, insertStats, consultStats, statsViaXML, quitter, login;
     private JLabel lblTitreApp;
 
     public MenuSwing() {
+        try {
+        	// Chargement des paramètres de l'application
+			parametres.loadFichierIni("./paramAppli.ini");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         initialize();
     }
 
@@ -74,7 +78,6 @@ public class MenuSwing {
         menuBar.add(joueursMenu);
         menuBar.add(matchMenu);
         menuBar.add(statsMenu);
-        menuBar.add(authMenu);
         menuBar.add(quitter);
 
         frame.setJMenuBar(menuBar);
@@ -97,12 +100,6 @@ public class MenuSwing {
     }
 
     private boolean showLoginDialog() {
-        try {
-			parametres.loadFichierIni("./paramAppli.ini");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
         Object[] message = {
@@ -114,10 +111,10 @@ public class MenuSwing {
         if (option == JOptionPane.OK_OPTION) {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            Boolean auth = UtilisateursCollec.authentification(username, password);
-            if (auth) {
-                return true;
-            }
+            UTILISATEUR utilisateur = UtilisateursCollec.authentification(username, password);
+            
+            return !utilisateur.getHabilitations().trim().isEmpty();
+
         }
         return false;
     }
